@@ -1,18 +1,27 @@
-# Python
+# Django
+*.pyc
 __pycache__/
-*.py[cod]
+db.sqlite3
+/media/
+staticfiles/
+
+# Entorno virtual
+venv/
+env/
+.env
+
+# VS Code
+.vscode/
+
+# Python general
+*.log
+*.pot
+*.pyc
 *.pyo
 *.pyd
-env/
-venv/
+__pycache__/
+*.so
 
-# Logs
-logs/
-*.log
-
-# OS generated files
+# Mac / Windows
 .DS_Store
 Thumbs.db
-
-# Environment variables
-.env
