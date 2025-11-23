@@ -1,3 +1,6 @@
+from django.db import models
+from django.conf import settings
+
 class UserProfile(models.Model):
     UNIT_CHOICES = [
         ('metric', 'Métrico'),
