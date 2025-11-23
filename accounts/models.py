@@ -8,7 +8,7 @@ class UserProfile(models.Model):
         ('es', 'Español'),
         ('en', 'Inglés'),
     ]
-
+#base de datos (tablas)
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
