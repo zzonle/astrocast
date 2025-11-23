@@ -22,7 +22,7 @@ SIMPLE_JWT = {
 }
 
 
-load_dotenv()  # ← carga variables desde .env
+load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
