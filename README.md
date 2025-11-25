@@ -1,36 +1,33 @@
 # 📋 Documentación de Endpoints de API AstroCast
 
-Breve descripción
-------------------
+## Breve descripción
 
 Este repositorio contiene el backend Django de AstroCast: una API REST para gestionar usuarios, consultas meteorológicas avanzadas y solicitudes de eventos.
 
-Instalación rápida (Windows / PowerShell)
-----------------------------------------
+## Instalación rápida (Windows / PowerShell)
 
-1) Sitúate en el directorio del proyecto:
+1. Sitúate en el directorio del proyecto:
 
 ```powershell
 cd C:\Users\Admin\.Desarrollo\astrocast
 ```
 
-2) Crea y activa un entorno virtual:
+2. Crea y activa un entorno virtual:
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate
 ```
 
-3) Instala dependencias:
+3. Instala dependencias:
 
 ```powershell
 pip install -r requirements.txt
 ```
 
-4) Variables de entorno (usa `.env.example` como plantilla):
+4. Configura variables de entorno (usa `.env.example` como plantilla):
 
 ```
-# Copia .env.example a .env y modifica según tu entorno
 SECRET_KEY=your-secret
 DEBUG=True
 DATABASE_URL=sqlite:///db.sqlite3
@@ -38,27 +35,29 @@ NODE_NASA_API_URL=https://nasa-private.vercel.app/api/probabilities/forecast
 ALLOWED_HOSTS=127.0.0.1,localhost
 ```
 
-5) Migraciones y superusuario:
+5. Ejecuta migraciones y crea superusuario:
 
 ```powershell
 python manage.py migrate
 python manage.py createsuperuser
 ```
 
-Notas sobre dependencias
-------------------------
+### Nota sobre dependencias
 
-El repo contenía originalmente `requeriments.txt` (con una errata). He añadido `requirements.txt` y `.env.example` para facilitar la puesta en marcha.
+El repositorio contenía originalmente `requeriments.txt` (con una errata). Se ha añadido `requirements.txt` y `.env.example` para facilitar la puesta en marcha.
 
+---
 
-## 1️⃣ Autenticación
+## 1. Autenticación
 
-### 🔐 Obtener Token de Acceso
+### Obtener Token de Acceso
+
 **Método:** `POST`  
 **URL:** `/api/auth/token/`  
 **Autenticación:** No requerida
 
-**JSON que acepta:**
+Solicitud:
+
 ```json
 {
   "username": "tu_usuario",
@@ -66,7 +65,8 @@ El repo contenía originalmente `requeriments.txt` (con una errata). He añadido
 }
 ```
 
-**JSON que devuelve:**
+Respuesta:
+
 ```json
 {
   "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -74,21 +74,22 @@ El repo contenía originalmente `requeriments.txt` (con una errata). He añadido
 }
 ```
 
----
+### Refrescar Token
 
-### 🔄 Refrescar Token
 **Método:** `POST`  
 **URL:** `/api/auth/token/refresh/`  
 **Autenticación:** No requerida
 
-**JSON que acepta:**
+Solicitud:
+
 ```json
 {
   "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
 
-**JSON que devuelve:**
+Respuesta:
+
 ```json
 {
   "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
@@ -97,14 +98,16 @@ El repo contenía originalmente `requeriments.txt` (con una errata). He añadido
 
 ---
 
-## 2️⃣ Cuentas de Usuario
+## 2. Cuentas de Usuario
 
-### 📝 Registrarse
+### Registrarse
+
 **Método:** `POST`  
 **URL:** `/api/accounts/register/`  
 **Autenticación:** No requerida
 
-**JSON que acepta:**
+Solicitud:
+
 ```json
 {
   "username": "nuevo_usuario",
@@ -113,7 +116,8 @@ El repo contenía originalmente `requeriments.txt` (con una errata). He añadido
 }
 ```
 
-**JSON que devuelve:**
+Respuesta:
+
 ```json
 {
   "id": 1,
@@ -122,19 +126,20 @@ El repo contenía originalmente `requeriments.txt` (con una errata). He añadido
 }
 ```
 
----
+### Obtener Mi Perfil
 
-### 👤 Obtener Mi Perfil
 **Método:** `GET`  
 **URL:** `/api/accounts/me/`  
-**Autenticación:** ✅ Requerida (Token Bearer)
+**Autenticación:** Requerida (Token Bearer)
 
-**Headers requeridos:**
+Headers requeridos:
+
 ```
 Authorization: Bearer <tu_access_token>
 ```
 
-**JSON que devuelve:**
+Respuesta:
+
 ```json
 {
   "id": 1,
@@ -149,20 +154,23 @@ Authorization: Bearer <tu_access_token>
 
 ---
 
-## 3️⃣ Clima y Pronóstico
+## 3. Clima y Pronóstico
 
-### 🌦️ Obtener Pronóstico del Clima
+### Obtener Pronóstico del Clima
+
 **Método:** `POST`  
 **URL:** `/api/weather/forecast/`  
-**Autenticación:** ✅ Requerida (Token Bearer)
+**Autenticación:** Requerida (Token Bearer)
 
-**Headers requeridos:**
+Headers requeridos:
+
 ```
 Authorization: Bearer <tu_access_token>
 Content-Type: application/json
 ```
 
-**JSON que acepta:**
+Solicitud:
+
 ```json
 {
   "location": "-33.45,-70.67",
@@ -171,12 +179,14 @@ Content-Type: application/json
 }
 ```
 
-**Notas sobre los parámetros:**
-- `location`: Formato obligatorio "latitud,longitud" (ej: -33.45,-70.67)
-- `date`: Formato obligatorio "YYYY-MM-DD"
-- `time`: Opcional, formato "HH:MM" (no se utiliza actualmente en el modelo analítico)
+**Parámetros:**
 
-**JSON que devuelve:**
+- `location`: Formato obligatorio "latitud,longitud" (ejemplo: -33.45,-70.67)
+- `date`: Formato obligatorio YYYY-MM-DD
+- `time`: Opcional, formato HH:MM (no se utiliza actualmente en el modelo analítico)
+
+Respuesta:
+
 ```json
 {
   "latitude": -33.45,
@@ -193,25 +203,26 @@ Content-Type: application/json
 }
 ```
 
-**⚠️ Importante:** El `weather_query_id` devuelto se usa para vincular este pronóstico con un evento cuando lo crees.
+**Importante:** El `weather_query_id` devuelto se usa para vincular este pronóstico con un evento.
 
 ---
 
-## 4️⃣ Eventos
+## 4. Eventos
 
-### 📅 Listar y Crear Eventos
-**Método:** `GET` / `POST`  
+### Listar Eventos
+
+**Método:** `GET`  
 **URL:** `/api/events/`  
-**Autenticación:** ✅ Requerida (Token Bearer)
+**Autenticación:** Requerida (Token Bearer)
 
-**Headers requeridos:**
+Headers requeridos:
+
 ```
 Authorization: Bearer <tu_access_token>
-Content-Type: application/json (para POST)
 ```
 
-#### GET - Obtener mis eventos
-**JSON que devuelve:**
+Respuesta:
+
 ```json
 [
   {
@@ -239,15 +250,27 @@ Content-Type: application/json (para POST)
 ]
 ```
 
-**Filtros disponibles (en la URL):**
+**Filtros disponibles:**
+
 - `?status=created` - Filtrar por estado
 
-**Orden:** Los eventos se devuelven ordenados por fecha de creación más reciente.
+**Orden:** Los eventos se devuelven ordenados por fecha de creación (más recientes primero).
 
----
+### Crear Evento
 
-#### POST - Crear un evento nuevo
-**JSON que acepta:**
+**Método:** `POST`  
+**URL:** `/api/events/`  
+**Autenticación:** Requerida (Token Bearer)
+
+Headers requeridos:
+
+```
+Authorization: Bearer <tu_access_token>
+Content-Type: application/json
+```
+
+Solicitud:
+
 ```json
 {
   "activity": "Concierto al aire libre",
@@ -259,20 +282,24 @@ Content-Type: application/json (para POST)
 ```
 
 **Campos requeridos:**
+
 - `activity` (string, máx 200 caracteres): Nombre o descripción del evento
 - `target_date` (date, formato YYYY-MM-DD): Fecha futura del evento
 - `location_id` (integer): ID de una ubicación existente del usuario
-- `target_time` (time, opcional, formato HH:MM): Hora del evento
 
-**Campo opcional:**
-- `weather_query_id` (integer, opcional): ID de una consulta de clima anterior (obtenido del endpoint `/api/weather/forecast/`)
+**Campos opcionales:**
+
+- `target_time` (time, formato HH:MM): Hora del evento
+- `weather_query_id` (integer): ID de una consulta de clima anterior
 
 **Restricciones:**
+
 - La fecha objetivo debe ser futura
 - La fecha no puede exceder 7 años en el futuro
 - No se permiten eventos duplicados (mismo usuario, ubicación, fecha y actividad)
 
-**JSON que devuelve:**
+Respuesta:
+
 ```json
 {
   "id": 3,
@@ -289,65 +316,81 @@ Content-Type: application/json (para POST)
 
 ---
 
-## 5️⃣ Ubicaciones (Endpoints implementados)
+## 5. Ubicaciones
 
-Ahora el proyecto expone endpoints para que los usuarios gestionen sus ubicaciones guardadas.
+### Listar Ubicaciones
 
-- `GET /api/weather/locations/` — Listar todas las ubicaciones del usuario autenticado.
-- `POST /api/weather/locations/` — Crear una nueva ubicación (name, city, country, latitude, longitude).
-- `GET /api/weather/locations/{id}/` — Obtener los datos de una ubicación propia.
-- `PATCH/PUT /api/weather/locations/{id}/` — Actualizar una ubicación propia.
-- `DELETE /api/weather/locations/{id}/` — Eliminar una ubicación propia.
+**Método:** `GET`  
+**URL:** `/api/weather/locations/`  
+**Autenticación:** Requerida (Token Bearer)
 
-Restricciones y notas:
-- Todas las rutas requieren autenticación (JWT — Bearer token).
-- Cada usuario solo puede ver y modificar sus propias ubicaciones. Intentos de acceder a ubicaciones de otros usuarios devuelven 404.
+### Crear Ubicación
 
-Ejemplo — Crear una ubicación y usarla:
+**Método:** `POST`  
+**URL:** `/api/weather/locations/`  
+**Autenticación:** Requerida (Token Bearer)
 
-```bash
-# Crear ubicación (con token)
-curl -X POST http://localhost:8000/api/weather/locations/ \
-  -H "Authorization: Bearer <ACCESS_TOKEN>" \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Oficina","city":"Santiago","country":"Chile","latitude":-33.45,"longitude":-70.66}'
+Solicitud:
 
-# Listar ubicaciones
-curl -X GET http://localhost:8000/api/weather/locations/ -H "Authorization: Bearer <ACCESS_TOKEN>"
-
-# Usar una ubicación para crear un evento (ejemplo): suponer location_id es 5
-curl -X POST http://localhost:8000/api/events/ \
-  -H "Authorization: Bearer <ACCESS_TOKEN>" \
-  -H "Content-Type: application/json" \
-  -d '{"activity":"Concierto","target_date":"2026-01-01","location_id":5}'
+```json
+{
+  "name": "Oficina",
+  "city": "Santiago",
+  "country": "Chile",
+  "latitude": -33.45,
+  "longitude": -70.66
+}
 ```
+
+### Obtener Ubicación
+
+**Método:** `GET`  
+**URL:** `/api/weather/locations/{id}/`  
+**Autenticación:** Requerida (Token Bearer)
+
+### Actualizar Ubicación
+
+**Método:** `PATCH` o `PUT`  
+**URL:** `/api/weather/locations/{id}/`  
+**Autenticación:** Requerida (Token Bearer)
+
+### Eliminar Ubicación
+
+**Método:** `DELETE`  
+**URL:** `/api/weather/locations/{id}/`  
+**Autenticación:** Requerida (Token Bearer)
+
+**Restricciones:**
+
+- Todas las rutas requieren autenticación (JWT — Token Bearer)
+- Cada usuario solo puede ver y modificar sus propias ubicaciones
+- Intentos de acceder a ubicaciones de otros usuarios devuelven error 404
 
 ---
 
-## 6️⃣ Resultados de Pronósticos (Próximas Funcionalidades)
+## 6. Resultados de Pronósticos
 
-> ⚠️ **Nota:** Los endpoints para obtener resultados de pronósticos (ForecastResult) aún no están documentados. Se espera implementar:
+> **Nota:** Los endpoints para obtener resultados de pronósticos (ForecastResult) aún no están documentados. Se espera implementar:
 > - `GET /api/events/{event_id}/forecast/` - Obtener el pronóstico y análisis de un evento
 
 ---
 
-## 📌 Resumen Rápido
+## Resumen Rápido
 
 | Endpoint | Método | Autenticación | Propósito |
-|----------|--------|---------------|-----------|
-| `/api/auth/token/` | POST | ❌ | Obtener token de acceso |
-| `/api/auth/token/refresh/` | POST | ❌ | Refrescar token expirado |
-| `/api/accounts/register/` | POST | ❌ | Crear nueva cuenta |
-| `/api/accounts/me/` | GET | ✅ | Ver perfil del usuario actual |
-| `/api/weather/forecast/` | POST | ✅ | Obtener pronóstico del clima |
-| `/api/weather/locations/` | GET, POST | ✅ | Listar / Crear ubicaciones del usuario |
-| `/api/weather/locations/{id}/` | GET, PATCH, DELETE | ✅ | Operaciones sobre ubicación propia |
-| `/api/events/` | GET | ✅ | Listar eventos del usuario |
-| `/api/events/` | POST | ✅ | Crear un evento nuevo |
+|----------|--------|---|-----------|
+| `/api/auth/token/` | POST | No | Obtener token de acceso |
+| `/api/auth/token/refresh/` | POST | No | Refrescar token expirado |
+| `/api/accounts/register/` | POST | No | Crear nueva cuenta |
+| `/api/accounts/me/` | GET | Sí | Ver perfil del usuario actual |
+| `/api/weather/forecast/` | POST | Sí | Obtener pronóstico del clima |
+| `/api/weather/locations/` | GET, POST | Sí | Listar y crear ubicaciones |
+| `/api/weather/locations/{id}/` | GET, PATCH, DELETE | Sí | Operaciones sobre ubicación propia |
+| `/api/events/` | GET, POST | Sí | Listar y crear eventos |
 
 ---
 
-## 🔧 Ejemplo de Uso Completo
+## Ejemplo de Uso Completo
 
 ```bash
 # 1. Registrarse
@@ -364,18 +407,23 @@ curl -X POST http://localhost:8000/api/auth/token/ \
 curl -X GET http://localhost:8000/api/accounts/me/ \
   -H "Authorization: Bearer <access_token>"
 
-# 4. Obtener pronóstico (con token)
+# 4. Crear una ubicación
+curl -X POST http://localhost:8000/api/weather/locations/ \
+  -H "Authorization: Bearer <access_token>" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Oficina","city":"Santiago","country":"Chile","latitude":-33.45,"longitude":-70.66}'
+
+# 5. Obtener pronóstico
 curl -X POST http://localhost:8000/api/weather/forecast/ \
   -H "Authorization: Bearer <access_token>" \
   -H "Content-Type: application/json" \
   -d '{"location":"-33.45,-70.67","date":"2025-12-25","time":"14:30"}'
-# Nota: La respuesta incluirá "weather_query_id" que usaremos en el paso 6
 
-# 5. Listar mis eventos
+# 6. Listar eventos
 curl -X GET http://localhost:8000/api/events/ \
   -H "Authorization: Bearer <access_token>"
 
-# 6. Crear un evento vinculado a la consulta de clima anterior
+# 7. Crear un evento vinculado a la consulta de clima
 curl -X POST http://localhost:8000/api/events/ \
   -H "Authorization: Bearer <access_token>" \
   -H "Content-Type: application/json" \
