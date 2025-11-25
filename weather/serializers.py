@@ -11,24 +11,37 @@ class ForecastRequestSerializer(serializers.Serializer):
     )
 
     def validate_location(self, value: str):
+        """
+        Valida SOLO el formato de location. 
+        Debe devolver un string válido, no un dict.
+        """
         try:
             lat_str, lon_str = value.split(",")
-            lat = float(lat_str.strip())
-            lon = float(lon_str.strip())
+            float(lat_str.strip())
+            float(lon_str.strip())
         except Exception:
             raise serializers.ValidationError(
                 "Formato de ubicación inválido. Usa 'lat,lon' (ej: -33.45,-70.67)."
             )
 
-        return {"latitude": lat, "longitude": lon}
+        # devolvemos el string original (ya validado)
+        return value
 
-    def to_internal_value(self, data):
-        raw = super().to_internal_value(data)
-        location = self.validate_location(raw["location"])
+    def validate(self, attrs):
+        """
+        Transformamos los datos a la estructura que necesita el servicio.
+        Aquí ya sabemos que location pasó validate_location.
+        """
+        loc = attrs["location"]
+        lat_str, lon_str = loc.split(",")
 
+        latitude = float(lat_str.strip())
+        longitude = float(lon_str.strip())
+
+        # construimos el dict interno que quieres usar en get_weather
         return {
-            "latitude": location["latitude"],
-            "longitude": location["longitude"],
-            "targetDate": raw["date"],  
-            "time": raw.get("time"),
+            "latitude": latitude,
+            "longitude": longitude,
+            "targetDate": attrs["date"],
+            "time": attrs.get("time"),
         }
