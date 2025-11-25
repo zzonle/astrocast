@@ -2,7 +2,6 @@ from django.conf import settings
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
-
 from weather.models import Location, WeatherCondition
 
 
@@ -11,8 +10,8 @@ class EventRequest(models.Model):
         ('created', 'Creado'),
         ('processed', 'Procesado'),
         ('cancelled', 'Cancelado'),
-        ('deleted', 'Eliminado'),   # para "borrado lógico" si lo necesitas
-        ('error', 'Error'),         # útil cuando falle NASA/modelo
+        ('deleted', 'Eliminado'),
+        ('error', 'Error'),
     ]
 
     user = models.ForeignKey(
@@ -25,26 +24,25 @@ class EventRequest(models.Model):
         on_delete=models.CASCADE,
         related_name='event_requests'
     )
+    
+    # 🔴 NUEVO: El enlace con la consulta de clima original
+    weather_query = models.ForeignKey(
+        'weather.WeatherQuery',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='linked_events',
+        help_text="La consulta de clima que motivó este evento."
+    )
+
     target_date = models.DateField()
-    # Hora es opcional / irrelevante
     target_time = models.TimeField(blank=True, null=True)
-
-    activity = models.CharField(
-        max_length=200,
-        help_text='Ej: desfile, concierto, partido, etc.'
-    )
-
-    status = models.CharField(
-        max_length=20,
-        choices=STATUS_CHOICES,
-        default='created'
-    )
-
+    activity = models.CharField(max_length=200, help_text='Ej: desfile, concierto...')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='created')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        # Evitar duplicar la misma consulta exacta por usuario
         unique_together = ('user', 'location', 'target_date', 'activity')
         ordering = ['-created_at']
 
@@ -53,16 +51,11 @@ class EventRequest(models.Model):
 
     def clean(self):
         from django.core.exceptions import ValidationError
-
-        # No permitir fechas fuera del rango del modelo (1990–2020 de entrenamiento,
-        # y hasta ~6–7 años hacia adelante desde "hoy").
         if self.target_date < timezone.now().date():
             raise ValidationError('La fecha objetivo debe ser futura.')
-
-        # Por ejemplo: limitar a 7 años desde hoy (ajustable)
         max_allowed = timezone.now().date().replace(year=timezone.now().year + 7)
         if self.target_date > max_allowed:
-            raise ValidationError('La fecha objetivo no puede exceder 7 años hacia adelante.')
+            raise ValidationError('La fecha objetivo no puede exceder 7 años.')
 
 class ForecastResult(models.Model):
     event_request = models.OneToOneField(

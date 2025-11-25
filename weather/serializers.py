@@ -45,3 +45,12 @@ class ForecastRequestSerializer(serializers.Serializer):
             "targetDate": attrs["date"],
             "time": attrs.get("time"),
         }
+
+
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        from .models import Location
+
+        model = Location
+        fields = ("id", "name", "city", "country", "latitude", "longitude", "created_at")
+        read_only_fields = ("id", "created_at")
