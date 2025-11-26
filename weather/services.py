@@ -82,7 +82,7 @@ def get_weather(params: Dict[str, Any]) -> Dict[str, Any]:
         resp = requests.post(
             API_URL,
             json=payload,
-            timeout=200,
+            timeout=4000,
         )
         resp.raise_for_status()
     except requests.exceptions.ConnectionError:
