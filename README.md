@@ -33,6 +33,16 @@ DEBUG=True
 DATABASE_URL=sqlite:///db.sqlite3
 NODE_NASA_API_URL=https://nasa-private.vercel.app/api/probabilities/forecast
 ALLOWED_HOSTS=127.0.0.1,localhost
+CORS_ALLOWED_ORIGINS=
+```
+
+**CORS:** 
+- Si `CORS_ALLOWED_ORIGINS` está vacío → permite cualquier origen (desarrollo/testing)
+- Si tiene valores específicos → solo esos orígenes pueden acceder
+
+Ejemplo para producción con dominio:
+```
+CORS_ALLOWED_ORIGINS=https://tudominio.com,https://www.tudominio.com
 ```
 
 5. Ejecuta migraciones y crea superusuario:
