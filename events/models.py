@@ -3,14 +3,14 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 from weather.models import Location, WeatherCondition
+from core.models import SoftDeleteModel
 
 
-class EventRequest(models.Model):
+class EventRequest(SoftDeleteModel):
     STATUS_CHOICES = [
         ('created', 'Creado'),
         ('processed', 'Procesado'),
         ('cancelled', 'Cancelado'),
-        ('deleted', 'Eliminado'),
         ('error', 'Error'),
     ]
 
@@ -25,7 +25,6 @@ class EventRequest(models.Model):
         related_name='event_requests'
     )
     
-    # 🔴 NUEVO: El enlace con la consulta de clima original
     weather_query = models.ForeignKey(
         'weather.WeatherQuery',
         on_delete=models.SET_NULL,

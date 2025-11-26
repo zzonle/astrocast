@@ -456,6 +456,37 @@ Solicitud:
 
 ---
 
+## 7. Soft Delete (Eliminación Segura)
+
+AstroCast implementa **Soft Delete** para todas las operaciones de eliminación, lo que significa que los datos no se eliminan literalmente de la base de datos sino que se marcan como eliminados.
+
+### Cómo Funciona
+
+Cuando eliminas una Ubicación o Evento:
+- El registro se marca con un timestamp en `deleted_at`
+- El registro NO aparece en consultas normales
+- Los datos se conservan para auditoría e historial
+- Pueden ser restaurados si es necesario
+
+### Endpoints de Eliminación
+
+Cuando haces DELETE en:
+- `/api/weather/locations/{id}/` → soft delete
+- `/api/events/{id}/` → soft delete
+
+El registro se marca como eliminado pero permanece en la BD.
+
+### Ventajas
+
+✅ Preserva historial y auditoría  
+✅ Evita errores de integridad referencial  
+✅ Permite restauración de datos  
+✅ Facilita análisis de datos históricos  
+
+Para más información, ver `SOFT_DELETE.md`
+
+---
+
 ## Resumen Rápido
 
 | Endpoint | Método | Autenticación | Propósito |

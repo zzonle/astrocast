@@ -1,8 +1,9 @@
 from django.conf import settings
 from django.db import models
+from core.models import SoftDeleteModel
 
 
-class Location(models.Model):
+class Location(SoftDeleteModel):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
