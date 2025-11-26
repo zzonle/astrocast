@@ -18,15 +18,16 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         return user
 
-# 2. Serializer para ver el Perfil (Lectura)
+# 2. Serializer para actualizar el Perfil (Lectura y Escritura)
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('unit_system', 'language')
+        fields = ('language', 'temperature_unit', 'avatar', 'subscription_plan', 'subscription_expires')
+        read_only_fields = ('subscription_plan', 'subscription_expires')
 
 # 3. Serializer para ver el Usuario completo (Lectura - /me)
 class UserSerializer(serializers.ModelSerializer):
-    profile = UserProfileSerializer()  # Aquí pegamos el perfil dentro del usuario
+    profile = UserProfileSerializer(read_only=True)
 
     class Meta:
         model = User

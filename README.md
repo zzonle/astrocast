@@ -156,9 +156,58 @@ Respuesta:
   "username": "tu_usuario",
   "email": "correo@ejemplo.com",
   "profile": {
-    "unit_system": "metric",
-    "language": "es"
+    "language": "es",
+    "temperature_unit": "C",
+    "avatar": null,
+    "subscription_plan": "free",
+    "subscription_expires": null
   }
+}
+```
+
+### Actualizar Perfil de Usuario
+
+**Método:** `GET, PATCH`  
+**URL:** `/api/accounts/profile/`  
+**Autenticación:** Requerida (Token Bearer)
+
+Headers requeridos:
+
+```
+Authorization: Bearer <tu_access_token>
+Content-Type: application/json
+```
+
+Solicitud (PATCH - actualización parcial):
+
+```json
+{
+  "language": "en",
+  "temperature_unit": "F",
+  "avatar": null
+}
+```
+
+**Campos actualizables:**
+
+- `language`: 'es', 'en', 'fr', 'pt'
+- `temperature_unit`: 'C', 'F', 'K'
+- `avatar`: Archivo de imagen (puede ser null)
+
+**Campos de solo lectura:**
+
+- `subscription_plan`: 'free', 'premium', 'pro'
+- `subscription_expires`: Administrado por el backend
+
+Respuesta:
+
+```json
+{
+  "language": "en",
+  "temperature_unit": "F",
+  "avatar": null,
+  "subscription_plan": "free",
+  "subscription_expires": null
 }
 ```
 
@@ -415,6 +464,7 @@ Solicitud:
 | `/api/auth/token/refresh/` | POST | No | Refrescar token expirado |
 | `/api/accounts/register/` | POST | No | Crear nueva cuenta |
 | `/api/accounts/me/` | GET | Sí | Ver perfil del usuario actual |
+| `/api/accounts/profile/` | GET, PATCH | Sí | Ver y actualizar perfil de usuario |
 | `/api/weather/forecast/` | POST | Sí | Obtener pronóstico del clima |
 | `/api/weather/locations/` | GET, POST | Sí | Listar y crear ubicaciones |
 | `/api/weather/locations/{id}/` | GET, PATCH, DELETE | Sí | Operaciones sobre ubicación propia |
