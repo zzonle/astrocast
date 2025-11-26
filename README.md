@@ -232,8 +232,10 @@ Respuesta:
     "target_time": "14:30",
     "location_id": 5,
     "location_name": "Plaza Mayor",
-    "weather_query_id": 42,
+    "weather_query_id": 3,
     "status": "created",
+    "created_by": "user1",
+    "created_by_email": "user1@example.com",
     "created_at": "2025-11-25T10:30:00Z"
   },
   {
@@ -245,10 +247,26 @@ Respuesta:
     "location_name": "Parque Central",
     "weather_query_id": null,
     "status": "created",
+    "created_by": "user1",
+    "created_by_email": "user1@example.com",
     "created_at": "2025-11-25T11:00:00Z"
   }
 ]
 ```
+
+**Campos retornados:**
+
+- `id`: ID único del evento
+- `activity`: Nombre/descripción del evento
+- `target_date`: Fecha del evento
+- `target_time`: Hora del evento (si aplica)
+- `location_id`: ID de la ubicación
+- `location_name`: Nombre de la ubicación
+- `weather_query_id`: ID de la consulta climática vinculada (null si no hay vínculo)
+- `status`: Estado del evento
+- `created_by`: Usuario que creó el evento
+- `created_by_email`: Email del usuario que creó el evento
+- `created_at`: Fecha y hora de creación
 
 **Filtros disponibles:**
 
@@ -310,9 +328,13 @@ Respuesta:
   "location_name": "Parque Central",
   "weather_query_id": 42,
   "status": "created",
+  "created_by": "user1",
+  "created_by_email": "user1@example.com",
   "created_at": "2025-11-25T12:00:00Z"
 }
 ```
+
+**Nota:** El campo `weather_query_id` se devuelve tanto en la creación como en la consulta de eventos, permitiendo rastrear la consulta climática que generó cada evento.
 
 ---
 

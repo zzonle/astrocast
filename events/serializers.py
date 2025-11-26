@@ -3,11 +3,10 @@ from .models import EventRequest
 from weather.models import WeatherQuery, Location
 
 class EventRequestSerializer(serializers.ModelSerializer):
-    # Campo de solo escritura: Recibe el ID del clima (ej: 502)
+    # Campo de lectura y escritura: Recibe el ID del clima (ej: 502) y lo devuelve en respuesta
     weather_query_id = serializers.PrimaryKeyRelatedField(
         queryset=WeatherQuery.objects.all(),
         source='weather_query',
-        write_only=True,
         required=False,
         allow_null=True
     )
@@ -35,7 +34,7 @@ class EventRequestSerializer(serializers.ModelSerializer):
             'target_time',
             'location_id',      # Input
             'location_name',    # Output
-            'weather_query_id', # Input (el link mágico)
+            'weather_query_id', # Input/Output (el link mágico)
             'status',
             'created_by',       # Output: usuario que lo creó
             'created_by_email', # Output: email del creador
